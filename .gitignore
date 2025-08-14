@@ -1,0 +1,47 @@
+# Django specific files
+*.log
+*.pot
+*.pyc
+__pycache__/
+celerybeat-schedule/
+db.sqlite3
+media/
+static_collected/
+.env
+.DS_Store # macOS specific file
+
+# Virtual Environment
+env/
+venv/
+.venv/
+
+# Node.js/React specific files
+node_modules/
+build/
+dist/
+.parcel-cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+.webpack/
+.next/ # Next.js specific, if used
+.cache/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.bak
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other common ignored files
+*~
+*.bak
+*.tmp
+*.sublime-project
+*.sublime-workspace
