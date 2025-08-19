@@ -69,7 +69,7 @@ const Dashboard = () => {
             title={`${totalEnergyGen} mw`}
             subtitle="Energy Generated"
             progress="0.75"
-            increase="+14%"
+            increase="+74%"
             icon={
               <ElectricBoltIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -88,7 +88,7 @@ const Dashboard = () => {
             title={`${totalEnergyConsume} mw`}
             subtitle="Energy Consumption"
             progress="0.50"
-            increase="+21%"
+            increase="-47%"
             icon={
               <ElectricBoltIcon
                 sx={{ color: colors.primary[600], fontSize: "26px" }}
@@ -107,7 +107,7 @@ const Dashboard = () => {
             title={`${totalEnergyLoss} mw`}
             subtitle="Energy Loss"
             progress="0.30"
-            increase="+5%"
+            increase="-15%"
             icon={
               <ElectricBoltIcon
                 sx={{ color: colors.redAccent[600], fontSize: "26px" }}
@@ -126,7 +126,7 @@ const Dashboard = () => {
             title="18"
             subtitle="Total Station"
             progress="0.80"
-            increase="+43%"
+            increase="89%"
             icon={
               <TrafficIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -161,7 +161,7 @@ const Dashboard = () => {
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
-                {totalEnergyGen}
+                {totalEnergyGen} mw
               </Typography>
             </Box>
             <Box>

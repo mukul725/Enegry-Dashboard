@@ -1,17 +1,35 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme, IconButton } from "@mui/material";
 import { tokens } from "../../theme";
 import { DataGrid } from "@mui/x-data-grid";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 import Header from "../../components/Header";
 import api from "../../services/api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate();
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      try {
+        await api.delete(`/users/${id}/`);
+        alert("User deleted successfully");
+        navigate("/dashboard/users");
+      } catch (err) {
+        alert("Error deleting user (check permissions)", err.message);
+      }
+    }
+  };
+
   const columns = [
     { field: "id", headerName: "ID" },
     {
@@ -69,6 +87,37 @@ export default function Users() {
       },
     },
   ];
+  if (currentUser?.role === "admin") {
+    columns.push({
+      field: "actions",
+      headerName: "Actions",
+      flex: 0.5,
+      sortable: false,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="center" gap="8px" width="100%">
+          <IconButton
+            onClick={() => navigate(`/dashboard/users/${params.row.id}`)}
+            sx={{
+              color: colors.blueAccent[500],
+              "&:hover": { color: colors.blueAccent[700] },
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+
+          <IconButton
+            onClick={() => handleDelete(params.row.id)}
+            sx={{
+              color: "red",
+              "&:hover": { color: "darkred" },
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      ),
+    });
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {

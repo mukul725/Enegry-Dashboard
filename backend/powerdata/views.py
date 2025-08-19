@@ -14,13 +14,11 @@ class PowerDataViewSet(viewsets.ModelViewSet):
             # admins see all data
             return PowerData.objects.all()
 
-        # regular users see data filtered by their assigned country/state
+        # regular users see data filtered by their assigned country
         queryset = PowerData.objects.all()
 
         if user.country:
             queryset = queryset.filter(country=user.country)
-        if user.state:
-            queryset = queryset.filter(state=user.state)
 
         return queryset
 

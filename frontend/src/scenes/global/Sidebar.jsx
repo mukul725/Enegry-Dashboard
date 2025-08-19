@@ -40,7 +40,6 @@ function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const { userInfo } = useContext(AuthContext);
-
   return (
     <Box
       sx={{
@@ -82,7 +81,7 @@ function Sidebar() {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                  {userInfo.role.toUpperCase()}
+                  {userInfo?.role.toUpperCase() || "User"}
                 </Typography>
                 <IconButton
                   onClick={() => {
@@ -138,7 +137,7 @@ function Sidebar() {
               Data
             </Typography>
             <Item
-              title="Manage Users"
+              title={userInfo.role === "admin" ? "Manage Users" : "Users"}
               to="/dashboard/users"
               icon={<PeopleOutlinedIcon />}
               selected={selected}

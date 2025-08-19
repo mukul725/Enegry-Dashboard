@@ -13,10 +13,16 @@ class UserListView(generics.ListAPIView):
         user = self.request.user
         if user.role == 'admin':
             return CustomUser.objects.all()
-        return CustomUser.objects.filter(id=user.id)
+        return CustomUser.objects.filter(country=user.country)
 
 
 class UserCreateView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminByRole]
+
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAdminByRole]

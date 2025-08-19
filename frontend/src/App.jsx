@@ -10,9 +10,11 @@ import Users from "./scenes/user";
 import PowerData from "./scenes/powerdata";
 import Bar from "./scenes/bar";
 import CreateUser from "./scenes/createuser";
+import UpdateUser from "./scenes/updateuser";
 import Line from "./scenes/line";
 import Pie from "./scenes/pie";
 import CreatePowerData from "./scenes/createpowerdata";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -38,18 +40,21 @@ function App() {
                 />
               }
             />
-            <Route
-              path="/dashboard/*"
-              element={<AppDash setLoginState={setLoggedIn} />}
-            >
-              <Route index element={<Dashboard />} />
-              <Route path="users" element={<Users />} />
-              <Route path="powerdata" element={<PowerData />} />
-              <Route path="create-user" element={<CreateUser />} />
-              <Route path="create-power-data" element={<CreatePowerData />} />
-              <Route path="bar" element={<Bar />} />
-              <Route path="pie" element={<Pie />} />
-              <Route path="line" element={<Line />} />
+            <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
+              <Route
+                path="/dashboard/*"
+                element={<AppDash setLoginState={setLoggedIn} />}
+              >
+                <Route index element={<Dashboard />} />
+                <Route path="users" element={<Users />} />
+                <Route path="users/:id" element={<UpdateUser />} />
+                <Route path="powerdata" element={<PowerData />} />
+                <Route path="create-user" element={<CreateUser />} />
+                <Route path="create-power-data" element={<CreatePowerData />} />
+                <Route path="bar" element={<Bar />} />
+                <Route path="pie" element={<Pie />} />
+                <Route path="line" element={<Line />} />
+              </Route>
             </Route>
           </Routes>
         </ThemeProvider>

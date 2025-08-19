@@ -1,12 +1,14 @@
 import { createContext } from "react";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const AuthContext = createContext();
 
 const API_URL = "http://127.0.0.1:8000/api";
 
 const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
@@ -34,6 +36,7 @@ const AuthProvider = ({ children }) => {
     setToken(null);
     setUserInfo(null);
     localStorage.clear();
+    navigate("/");
   };
 
   return (

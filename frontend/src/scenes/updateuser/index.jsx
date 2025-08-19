@@ -3,36 +3,70 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
-
 import api from "../../services/api";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const roles = [
   { label: "User", value: "user" },
   { label: "Admin", value: "admin" },
 ];
-const positions = [
-  { label: "global admin", value: "Global Admin" },
-  { label: "country Manager", value: "Country Manager" },
-  { label: "station Manager", value: "Station Manager" },
-];
 
-const CreateUser = () => {
+const UpdateUser = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const { id } = useParams();
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await api.get(`/users/${id}/`);
+        setUser(res.data);
+      } catch (error) {
+        console.log("Failed to fetch user:", error);
+      }
+    };
+    fetchUser();
+  }, [id]);
+
+  if (!user) return <div>Loading......</div>;
+
+  const initialValues = {
+    username: user?.username || "",
+    password: "",
+    email: user?.email || "",
+    role: user?.role || "",
+    country: user?.country || "",
+    state: user?.state || "",
+  };
 
   const handleFormSubmit = async (values) => {
-    console.log(values);
     try {
-      const res = await api.post("/users/create/", values);
-      alert(`User ${res.data.username} created!`);
+      const payload = {};
+      Object.keys(values).forEach((key) => {
+        if (values[key] !== initialValues[key] && values[key] !== "") {
+          payload[key] = values[key];
+        }
+      });
+
+      if (Object.keys(payload).length === 0) {
+        alert("No changes made.");
+        return;
+      }
+
+      const res = await api.patch(`/users/${id}/`, payload);
+      alert(`User ${res.data.username} Updated!`);
+      navigate("/dashboard/users/");
     } catch (err) {
-      console.log(err.message);
-      alert("Error creating user (check permissions)");
+      alert("Error creating user (check permissions)", err.message);
     }
   };
 
   return (
     <Box m="20px">
-      <Header title="CREATE USER" subtitle="Create a New User Profile" />
+      <Header title="UPDATE USER" subtitle="Update User Profile" />
 
       <Formik
         onSubmit={handleFormSubmit}
@@ -113,7 +147,6 @@ const CreateUser = () => {
                   </MenuItem>
                 ))}
               </TextField>
-
               <TextField
                 fullWidth
                 variant="filled"
@@ -143,7 +176,7 @@ const CreateUser = () => {
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
               <Button type="submit" color="secondary" variant="contained">
-                Create New User
+                Update User
               </Button>
             </Box>
           </form>
@@ -154,21 +187,12 @@ const CreateUser = () => {
 };
 
 const checkoutSchema = yup.object().shape({
-  username: yup.string().required("required"),
-  password: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  role: yup.string().required("Please select a role"),
-
-  country: yup.string().required("required"),
-  state: yup.string().required("required"),
+  username: yup.string(),
+  password: yup.string(),
+  email: yup.string().email("invalid email"),
+  role: yup.string(),
+  country: yup.string(),
+  state: yup.string(),
 });
-const initialValues = {
-  username: "",
-  password: "",
-  email: "",
-  role: "",
-  country: "",
-  state: "",
-};
 
-export default CreateUser;
+export default UpdateUser;

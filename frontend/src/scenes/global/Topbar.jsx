@@ -46,7 +46,6 @@ function Topbar({ setLoginState }) {
         <IconButton
           onClick={() => {
             logout();
-            navigate("/");
             setLoginState(false);
           }}
         >
