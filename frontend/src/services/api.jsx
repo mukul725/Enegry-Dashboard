@@ -1,15 +1,14 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+
 const refreshAccessToken = async () => {
   const refresh = localStorage.getItem("refresh");
   if (!refresh) return null;
 
-  const response = await axios.post(
-    `http://127.0.0.1:8000/api/token/refresh/`,
-    {
-      refresh,
-    }
-  );
+  const response = await axios.post(`${API_URL}/token/refresh/`, {
+    refresh,
+  });
 
   const newAccess = response.data.access;
   localStorage.setItem("access", newAccess);
