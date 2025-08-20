@@ -10,7 +10,7 @@ const PowerDataProvider = ({ children }) => {
         const res = await api.get("/powerdata/");
         setPowerData(res.data);
       } catch (err) {
-        console.err("Error fetching data:", err);
+        console.error("Error fetching data:", err);
       }
     };
     fetchPowerData();
