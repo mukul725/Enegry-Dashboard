@@ -15,7 +15,7 @@ const refreshAccessToken = async () => {
   return newAccess;
 };
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: API_URL,
 });
 
 api.interceptors.request.use(async (config) => {
