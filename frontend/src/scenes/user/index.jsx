@@ -29,6 +29,13 @@ export default function Users() {
       }
     }
   };
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await api.get("/users/");
+      setUsers(res.data);
+    };
+    fetchUsers();
+  }, []);
 
   const columns = [
     { field: "id", headerName: "ID" },
@@ -118,15 +125,6 @@ export default function Users() {
       ),
     });
   }
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const res = await api.get("/users/");
-      setUsers(res.data);
-    };
-    fetchUsers();
-  }, []);
-
   return (
     <Box m="20px">
       <Header title="USERS" subtitle="Managing the Users" />
