@@ -8,25 +8,33 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { powerData } = useContext(PowerDataContext);
-  const data = Object.values(
-    powerData.reduce((acc, curr) => {
-      if (!acc[curr.country]) {
-        acc[curr.country] = {
-          id: curr.country,
-          color: tokens("dark").greenAccent[500],
-          data: [],
-        };
-      }
+  const data = Array.isArray(powerData)
+    ? Object.values(
+        powerData.reduce((acc, curr) => {
+          if (!curr?.country) return acc;
 
-      acc[curr.country].data.push(
-        { x: "energy generated", y: Math.floor(curr.generation_mw) },
-        { x: "energy loss", y: Math.floor(curr.distribution_loss) },
-        { x: "energy consumption", y: Math.floor(curr.consumption_mw) }
-      );
+          if (!acc[curr.country]) {
+            acc[curr.country] = {
+              id: curr.country,
+              color: tokens("dark").greenAccent[500],
+              data: [],
+            };
+          }
 
-      return acc;
-    }, {})
-  );
+          acc[curr.country].data.push(
+            { x: "energy generated", y: Number(curr.generation_mw) || 0 },
+            { x: "energy loss", y: Number(curr.distribution_loss) || 0 },
+            { x: "energy consumption", y: Number(curr.consumption_mw) || 0 }
+          );
+
+          return acc;
+        }, {})
+      )
+    : [];
+
+  if (!data.length) {
+    return <p style={{ color: colors.grey[100] }}>No power data available</p>;
+  }
 
   return (
     <ResponsiveLine
