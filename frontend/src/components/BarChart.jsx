@@ -1,8 +1,9 @@
-import { useTheme } from "@mui/material";
+import { useTheme, Box, Typography } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
 import { useContext } from "react";
 import { PowerDataContext } from "../services/powerDataContext";
+
 const BarChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -17,6 +18,21 @@ const BarChart = ({ isDashboard = false }) => {
     loss: data.distribution_loss,
     lossColor: "hsl(97, 70%, 50%)",
   }));
+
+  if (!data.length) {
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="400px"
+      >
+        <Typography variant="h6" color={colors.grey[100]}>
+          No power data available
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <ResponsiveBar

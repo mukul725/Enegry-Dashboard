@@ -1,21 +1,37 @@
 import { ResponsivePie } from "@nivo/pie";
 import { tokens } from "../theme";
-import { useTheme } from "@mui/material";
+import { useTheme, Box, Typography } from "@mui/material";
 import { useContext } from "react";
 import { PowerDataContext } from "../services/powerDataContext";
 
 const PieChart = () => {
   const { powerData } = useContext(PowerDataContext);
-  const DATA = powerData.map((energy) => ({
+  const data = powerData.map((energy) => ({
     id: energy.country,
     label: energy.country,
     value: energy.generation_mw,
   }));
 
-  const uniqueById = [...new Map(DATA.map((item) => [item.id, item])).values()];
+  const uniqueById = [...new Map(data.map((item) => [item.id, item])).values()];
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  if (!data.length) {
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="400px"
+      >
+        <Typography variant="h6" color={colors.grey[100]}>
+          No power data available
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <ResponsivePie
       data={uniqueById}

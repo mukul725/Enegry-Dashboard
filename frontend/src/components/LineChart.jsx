@@ -1,5 +1,5 @@
 import { ResponsiveLine } from "@nivo/line";
-import { useTheme } from "@mui/material";
+import { useTheme, Box, Typography } from "@mui/material";
 import { tokens } from "../theme";
 import { useContext } from "react";
 import { PowerDataContext } from "../services/powerDataContext";
@@ -33,9 +33,19 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
     : [];
 
   if (!data.length) {
-    return <p style={{ color: colors.grey[100] }}>No power data available</p>;
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="400px"
+      >
+        <Typography variant="h6" color={colors.grey[100]}>
+          No power data available
+        </Typography>
+      </Box>
+    );
   }
-
   return (
     <ResponsiveLine
       data={data}
